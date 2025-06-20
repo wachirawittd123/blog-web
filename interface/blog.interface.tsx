@@ -1,6 +1,7 @@
 import { IComment } from "@/models/Comment"
 import { ICategory } from "./category.interface"
 import { IUser } from "./user.interface"
+import { IVerifyToken } from "./auth.interface"
 
 export interface ISearchBlog {
     query?: string
@@ -35,4 +36,16 @@ export interface ICreatePost {
     title: string
     content: string
     category: string
+}
+
+export interface IModalAddBlog {
+    visible: boolean
+    data: IBlog | null
+}
+
+
+export interface IFunctionBlog {
+    user?: IVerifyToken
+    typeQuery?: string
+    author?: string
 }

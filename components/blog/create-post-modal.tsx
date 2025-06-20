@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal } from '../Modal';
-import { ICategory, ICreatePost } from '@/interface';
+import { ICategory, ICreatePost, IModalAddBlog } from '@/interface';
 import { SelectPostComponent } from './select-post';
 
 interface CreatePostModalProps {
-  isOpen: boolean;
+  modal: IModalAddBlog;
   onClose: () => void;
   onSubmit: (data: ICreatePost) => void;
   categories: ICategory[];
@@ -12,18 +12,25 @@ interface CreatePostModalProps {
 }
 
 export const CreatePostModal: React.FC<CreatePostModalProps> = ({
-  isOpen,
+  modal,
   onClose,
   onSubmit,
   categories,
   isLoading = false
 }) => {
+  console.log('modal========>', modal)
   let defaultFormData = {
     title: '',
     content: '',
     category: 'all'
   }
   const [formData, setFormData] = useState(defaultFormData);
+
+  useEffect(() => {
+    if(modal?.data?._id) {
+      setFormData(modal?.data)
+    }
+  }, [modal])
 
   const handleInputChange = (value: string, key: string) => {
     setFormData(prev => ({
@@ -50,7 +57,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
 
   return (
     <Modal
-      isOpen={isOpen}
+      isOpen={modal?.visible}
       onClose={handleCancel}
       title="Create Post"
       size="lg"

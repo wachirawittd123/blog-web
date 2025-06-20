@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
 import { ICategory } from "./category.interface"
-import { ISearchBlog } from "./blog.interface"
+import { IVerifyToken } from "./auth.interface"
 
 export interface IResponseAPI  {
     status_code: number
@@ -10,6 +10,7 @@ export interface IResponseAPI  {
 
 export interface LayoutProps {
     children: ReactNode
+    user?: IVerifyToken
 }
 
 export interface ISelectComponent  {
@@ -40,4 +41,8 @@ export interface ICreatePostData {
     title: string
     content: string
     category: string
+}
+
+export interface IHeaderProps {
+    user?: IVerifyToken
 }

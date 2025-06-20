@@ -2,11 +2,13 @@ import { ExpandData } from "@/mock-data/sider-mock"
 import { Green500, SuccessColor, White } from "./Color"
 import Image from "next/image"
 import { useState } from "react"
-import { ISiderData } from "@/interface"
+import { IHeaderProps, IResponseAPI, ISiderData } from "@/interface"
 import { usePathname } from "next/navigation"
 import { FaArrowRight } from "react-icons/fa"
+import axios from "axios"
+import toast from "react-hot-toast"
 
-const Header = () => {
+const Header: React.FC<IHeaderProps> = ({ user }) => {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -14,13 +16,33 @@ const Header = () => {
     setMenuOpen(!menuOpen)
   }
 
+  const redirectToLogin = () => {
+    window.location.href = '/login'
+  }
+
+  const onSignIn = async() => {
+    if(!user?.id) return redirectToLogin()
+    try {
+      const res = await axios.post('/api/auth/logout')
+      if(res?.data.status_code === 200) {
+        toast.success("Logout successfully")
+        setTimeout(() => {
+          redirectToLogin()
+        }, 1000)
+      }
+    } catch (err: IResponseAPI | any) {
+      toast.error(err?.response?.data?.message || "Logout failed")
+    }
+    return 
+  }
+
   return (
     <nav className={`bg-[${Green500}] text-white px-4 py-4 flex items-center justify-between lg:justify-between`}>
       <p className="hidden lg:block text-2xl italic font-medium">a Board</p>
       
       <div className="flex items-center gap-4 ml-auto">
-        <button className={`hidden lg:block bg-[${SuccessColor}] text-white px-4 py-2 rounded hover:bg-gray-100`}>
-          Sign In
+        <button className={`hidden lg:block bg-[${SuccessColor}] text-white px-4 py-2 rounded hover:bg-gray-100`} onClick={onSignIn}>
+          {user?.id ? "Sign Out" : "Sign In"}
         </button>
         
         <div className="lg:hidden flex items-center justify-end">

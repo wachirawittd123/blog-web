@@ -1,13 +1,13 @@
 import { HeaderBlog, PostList } from '@/components/blog'
 import Layout from '@/components/Layout'
-import { ICategory, ICreatePost, IGetServerSideProps, IQuery, ISearchBlog } from '@/interface'
+import { ICategory, IGetServerSideProps } from '@/interface'
 import { GetServerSidePropsContext } from 'next'
-import React, { useState } from 'react'
+import React from 'react'
 import { convertToken } from '@/lib/fontend/auth'
 import { getCategoriesServerSide } from '@/documents/categories'
-import { useQueryPost } from '@/documents/blog'
+import { useFunctionBlog, useQueryPost } from '@/documents/blog'
 import { CreatePostModal } from '@/components/blog/create-post-modal'
-import toast from 'react-hot-toast'
+
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context
@@ -23,41 +23,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 const MainPage: React.FC<IGetServerSideProps> = ({ user, categories }) => {
-  const [search, setSearch] = useState<ISearchBlog>({query: '', category: 'all'})
-  const [modalAdd, setModalAdd] = useState(false)
-
-  const { data, setFilter, _fetch } = useQueryPost()
-
-  const isModal = () => {
-    if(!user?.id) {
-      toast.error("Please login to create a post")
-      return window.location.href = '/login'
-    }
-    setModalAdd(!modalAdd)
-  }
-
-  const onSearch = (e: React.ChangeEvent<HTMLInputElement> | any, key: string) => {
-    setSearch({...search, [key]: key === "query" ? e?.target?.value : e})
-    setFilter((f: IQuery) => {
-      let newFilter = {...f}
-      if(key === "query") newFilter.search = e?.target?.value
-      if(key === "category") {
-        if(e === "all") {
-          newFilter.category = ''
-        } else {
-          newFilter.category = e
-        }
-      }
-      return newFilter
-    })
-  }
-
-  const onFinish = async (values: ICreatePost) => {
-
-  }
-
+  const { search, onSearch, isModal, modalAdd, onFinish, data } = useFunctionBlog({user, typeQuery: "all"})
   return (
-    <Layout>
+    <Layout user={user}>
       <HeaderBlog 
         search={search} 
         onChange={onSearch}
@@ -66,7 +34,7 @@ const MainPage: React.FC<IGetServerSideProps> = ({ user, categories }) => {
       />
       <PostList blogs={data} />
       <CreatePostModal 
-        isOpen={modalAdd}
+        modal={modalAdd}
         onClose={isModal}
         onSubmit={onFinish}
         categories={categories as ICategory[]}

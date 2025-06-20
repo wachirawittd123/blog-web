@@ -21,7 +21,6 @@ export const Modal: React.FC<ModalProps> = ({
   size = 'lg',
   className = ''
 }) => {
-  console.log('className=========>', className)
   // Close modal on Escape key press
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
