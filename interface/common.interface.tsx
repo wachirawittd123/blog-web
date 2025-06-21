@@ -1,5 +1,6 @@
 import { ReactNode } from "react"
 import { ICategory } from "./category.interface"
+import { IUser } from "./user.interface"
 import { IVerifyToken } from "./auth.interface"
 
 export interface IResponseAPI  {
@@ -10,7 +11,8 @@ export interface IResponseAPI  {
 
 export interface LayoutProps {
     children: ReactNode
-    user?: IVerifyToken
+    user?: IUser
+    bgcolor?: string
 }
 
 export interface ISelectComponent  {
@@ -44,5 +46,5 @@ export interface ICreatePostData {
 }
 
 export interface IHeaderProps {
-    user?: IVerifyToken
+    user?: IUser
 }

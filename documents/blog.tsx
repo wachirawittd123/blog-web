@@ -17,6 +17,9 @@ export const useQueryPost = (typeQuery: string, author?: string) => {
 
     const _fetch = async () => {
         setLoading(true)
+        console.log('typeQuery=========>', typeQuery)
+        console.log('author=========>', author)
+        if(typeQuery === "private" && !author) return setDefaultData()
         try {
             const result = await axios.get(`/api/blogs`, { params: {...filter, typeQuery, author: author || ""} })
             if (result?.data?.status_code === 200) {
@@ -55,7 +58,7 @@ export const useFunctionBlog = ({user, typeQuery = "all", author = ""}: IFunctio
   const { data, setFilter, _fetch } = useQueryPost(typeQuery, author)
 
   const isModal = (values?: IBlog) => {
-    if(!user?.id) {
+    if(!user?._id) {
       toast.error("Please login to create a post")
       return window.location.href = '/login'
     }
@@ -79,15 +82,20 @@ export const useFunctionBlog = ({user, typeQuery = "all", author = ""}: IFunctio
   }
 
   const onFinish = async (values: ICreatePost) => {
+    let description = modalAdd.data?._id ? "Update" : "Create"
     try {
-      const res = await axios.post('/api/blogs', values)
+      const res = await axios({
+        method: modalAdd.data?._id ? "PUT" : "POST",
+        url: modalAdd.data?._id ? `/api/blogs/${modalAdd.data?._id}` : "/api/blogs",
+        data: values
+      })
       if(res?.data?.status_code === 200) {
-        toast.success("Create post successfully")
+        toast.success(`${description} post successfully`)
         setModalAdd(defaultModal)
         _fetch()
       }
     } catch (err: IResponseAPI | any) {
-      toast.error(err?.response?.data?.message || "Create post failed")
+      toast.error(err?.response?.data?.message || `${description} post failed`)
     }
   }
 
@@ -100,6 +108,34 @@ export const useFunctionBlog = ({user, typeQuery = "all", author = ""}: IFunctio
     setModalAdd,
     data,
     setFilter,
+    _fetch
+  }
+}
+
+export const useQueryBlogDetail = (id: string) => {
+  const [data, setData] = useState<IBlog | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const _fetch = async () => {
+    setLoading(true)
+    try {
+      const result = await axios.get(`/api/blogs/${id}`)
+      if(result?.data?.status_code === 200) {
+        setData(result?.data?.data)
+      }
+    } catch(err: IResponseAPI | any) {
+      toast.error(err?.response?.data?.message)
+    }
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    if(id) _fetch()
+  }, [id])
+
+  return {
+    data,
+    loading,
     _fetch
   }
 }

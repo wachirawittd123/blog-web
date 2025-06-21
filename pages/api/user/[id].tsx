@@ -14,19 +14,17 @@ export const config = {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await connectDB()
   const { id } = req.query;
-
   if (req.method === "GET") {
     try {
-      await checkVerifyToken({req, res, roles: ["admin"]})
+
+      await checkVerifyToken({req, res, roles: ["admin", "user"]})
       if (!id) {
         return res.status(400).json({ status_code: 400, message: "Missing user ID" })
       }
-  
-      const user = await User.findById(id)
+      const user = await User.findOne({_id: id})
       if (!user) {
         return res.status(404).json({ status_code: 404, message: "User not found" })
       }
-  
       return res.status(200).json({ status_code: 200, data: user })
     } catch (error: any) {
       return res.status(500).json({ status_code: 500, message: error?.message })

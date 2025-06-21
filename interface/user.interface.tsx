@@ -6,4 +6,5 @@ export interface IUser {
     avatarUrl: string
     createdAt: Date
     updatedAt: Date
+    active: boolean
 }

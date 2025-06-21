@@ -3,9 +3,9 @@ import Sidebar from './Sidebar'
 import Header from './Header'
 import { LayoutProps } from '@/interface'
 
-const Layout = ({ children, user }: LayoutProps) => {
+const Layout = ({ children, user, bgcolor = "#BBC2C0" }: LayoutProps) => {
   return (
-    <div className="min-h-screen flex flex-col bg-[#BBC2C0]">
+    <div className={`min-h-screen flex flex-col bg-[${bgcolor}]`}>
       <Header user={user} />
       <div className="flex flex-row flex-1">
         <Sidebar />

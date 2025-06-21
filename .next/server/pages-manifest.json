@@ -2,8 +2,13 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/api/category": "pages/api/category.js",
   "/login": "pages/login.js",
-  "/api/blogs": "pages/api/blogs.js"
+  "/api/auth/logout": "pages/api/auth/logout.js",
+  "/": "pages/index.js",
+  "/api/auth/login": "pages/api/auth/login.js",
+  "/api/user/[id]": "pages/api/user/[id].js",
+  "/api/blogs": "pages/api/blogs.js",
+  "/api/blogs/[id]": "pages/api/blogs/[id].js",
+  "/api/category": "pages/api/category.js",
+  "/blog/[id]": "pages/blog/[id].js"
 }

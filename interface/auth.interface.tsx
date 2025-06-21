@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { ICategory } from "./category.interface"
+import { IUser } from "./user.interface"
 
 export interface IVerifyToken {
     id: string
@@ -16,6 +17,11 @@ export interface ICheckVerifyToken {
 
 export interface IGetServerSideProps {
     token?: string
-    user?: IVerifyToken
+    user?: IUser
     categories?: ICategory[]
+}
+
+export interface IConvertToken {
+    token: string
+    user: IVerifyToken
 }

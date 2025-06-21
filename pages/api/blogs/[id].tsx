@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === "GET") {
     try {
       const blog = await Blog.findById(id)
-        .populate("author", "username name avatarUrl")
+        .populate("author", "username name avatarUrl active")
         .populate("category", "name description")
 
       if (!blog) {
@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       const comments = await Comment.find({ blog: id })
-        .populate("author", "username avatarUrl")
+        .populate("author", "username avatarUrl name active")
         .sort({ createdAt: -1 })
 
       return res.status(200).json({
@@ -42,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { title, content } = req.body
     const updated = await Blog.findByIdAndUpdate(
       id,
-      { title, content },
+      { title, content, updatedAt: new Date() },
       { new: true }
     )
 

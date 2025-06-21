@@ -25,11 +25,28 @@ export interface IBlog {
     updatedAt: Date
     categories: ICategory
     author: IUser
-    comments: IComment[]
+    comments: any[]
+}
+
+export interface IBlogDetail {
+    data: IBlog
+    onComment: (text: string) => void
+    user: IUser
 }
 
 export interface IPostList {
     blogs: IBlog[]
+    typeQuery?: string
+    onEdit?: (values: IBlog) => void
+    onDelete?: (id: string) => void
+}
+
+export interface CreatePostModalProps {
+    modal: IModalAddBlog;
+    onClose: () => void;
+    onSubmit: (data: ICreatePost) => void;
+    categories: ICategory[];
+    isLoading?: boolean;
 }
 
 export interface ICreatePost {
@@ -45,7 +62,7 @@ export interface IModalAddBlog {
 
 
 export interface IFunctionBlog {
-    user?: IVerifyToken
+    user?: IUser
     typeQuery?: string
     author?: string
 }

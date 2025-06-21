@@ -21,6 +21,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const user = await User.findOne({ username })
   if (!user) return res.status(401).json({ message: "Invalid credentials" })
 
+  await User.findByIdAndUpdate(user._id, { active: true })
+
 //   const match = await bcrypt.compare(password, user.password)
 //   if (!match) return res.status(401).json({ message: "Invalid credentials" })
 
@@ -47,7 +49,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             id: user._id,
             username: user.username,
             name: user.name,
-            avatarUrl: user.avatarUrl
+            avatarUrl: user.avatarUrl,
+            active: true
         }
     }
    })

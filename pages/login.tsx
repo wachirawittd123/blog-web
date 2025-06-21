@@ -58,7 +58,7 @@ const LoginPage = () => {
       <div className="flex flex-col flex-1 justify-start lg:justify-center p-6">
         <form
           onSubmit={onFinish}
-          className="w-full max-w-sm space-y-6 mt-28 lg:mt-0 mx-auto"
+          className="w-full max-w-sm space-y-6 mt-20 lg:mt-0 mx-auto"
           noValidate
         >
           <h1 className="text-white text-2xl font-semibold text-4xl">Sign in</h1>
@@ -89,7 +89,7 @@ const LoginPage = () => {
       </div>
 
       {/* Desktop Illustration */}
-      <div className="hidden lg:flex bg-[Green300] items-center justify-center rounded-l-3xl">
+      <div className="hidden lg:flex bg-[#2B5F44] items-center justify-center rounded-l-3xl">
         <div className="text-center">
           <Image
             src="/images/board-illustration.png"

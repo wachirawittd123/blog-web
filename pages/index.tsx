@@ -5,8 +5,9 @@ import { GetServerSidePropsContext } from 'next'
 import React from 'react'
 import { convertToken } from '@/lib/fontend/auth'
 import { getCategoriesServerSide } from '@/documents/categories'
-import { useFunctionBlog, useQueryPost } from '@/documents/blog'
+import { useFunctionBlog } from '@/documents/blog'
 import { CreatePostModal } from '@/components/blog/create-post-modal'
+import { getUserServerSide } from '@/documents/user'
 
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -14,9 +15,17 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const personal = convertToken(req)
   let categories: ICategory[] = await getCategoriesServerSide()
   
+  if(!personal?.user?.id) {
+    return {
+      props: {
+        categories: [{_id: "all", name: "All"}, ...categories]
+      }
+    }
+  }
+  const user = await getUserServerSide(personal)
   return {
     props: {
-      ...personal,
+      user,
       categories: [{_id: "all", name: "All"}, ...categories]
     },
   }

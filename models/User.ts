@@ -7,6 +7,7 @@ export interface IUser extends Document {
   name?: string
   avatarUrl?: string
   role: string
+  active: boolean
 }
 
 const userSchema = new Schema<IUser>(
@@ -15,7 +16,8 @@ const userSchema = new Schema<IUser>(
     // password: { type: String, required: true },
     name: { type: String },
     avatarUrl: { type: String },
-    role: { type: String, enum: ["user", "admin"], default: "user" }
+    role: { type: String, enum: ["user", "admin"], default: "user" },
+    active: { type: Boolean, default: false }
   },
   { timestamps: true }
 )

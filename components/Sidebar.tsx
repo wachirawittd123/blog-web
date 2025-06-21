@@ -1,14 +1,14 @@
-import { ISiderData } from "@/interface"
+import { IHeaderProps, ISiderData } from "@/interface"
 import { SiderData } from "@/mock-data/sider-mock"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Green500, Grey100 } from "./Color"
+import { Green500 } from "./Color"
 
-const Sidebar = () => {
+const Sidebar: React.FC<IHeaderProps> = ({user}) => {
   const pathname = usePathname()
 
   return (
-    <aside className={`hidden lg:flex flex-col w-[240px] bg-[${Grey100}] text-white px-6 py-8`}>
+    <aside className={`hidden lg:flex flex-col w-[240px] bg-[#BBC2C0] text-white px-6 py-8`}>
       <nav className="flex flex-col gap-4 text-base">
         {
           SiderData.map((item: ISiderData, index: number) => {

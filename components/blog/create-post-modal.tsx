@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal } from '../Modal';
-import { ICategory, ICreatePost, IModalAddBlog } from '@/interface';
+import { CreatePostModalProps, ICategory, } from '@/interface';
 import { SelectPostComponent } from './select-post';
-
-interface CreatePostModalProps {
-  modal: IModalAddBlog;
-  onClose: () => void;
-  onSubmit: (data: ICreatePost) => void;
-  categories: ICategory[];
-  isLoading?: boolean;
-}
 
 export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   modal,
@@ -18,7 +10,6 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   categories,
   isLoading = false
 }) => {
-  console.log('modal========>', modal)
   let defaultFormData = {
     title: '',
     content: '',
@@ -39,11 +30,11 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     if (!formData.title.trim() || !formData.content.trim() || formData.category?.trim() === 'all') {
       return;
     }
-    onSubmit(formData);
+    await onSubmit(formData);
     // Reset form after submission
     setFormData(defaultFormData);
   };
@@ -59,7 +50,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
     <Modal
       isOpen={modal?.visible}
       onClose={handleCancel}
-      title="Create Post"
+      title={modal?.data?._id ? "Update Post" : "Create Post"}
       size="lg"
       className="sm:mx-4 sm:max-w-full md:max-w-2xl"
     >
@@ -124,7 +115,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               }
             `}
           >
-            {isLoading ? 'Posting...' : 'Post'}
+            {isLoading ? 'Posting...' : modal?.data?._id ? 'Update' : 'Post'}
           </button>
         </div>
       </div>

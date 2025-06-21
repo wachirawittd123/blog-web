@@ -14,3 +14,8 @@ pnpm dev
 bun dev
 ```
 
+.env.local:
+```bash
+MONGODB_URI="mongodb://localhost:27017/blog-test"
+JWT_SECRET="blog-test-urek"
+```

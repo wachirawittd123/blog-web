@@ -3,7 +3,7 @@ import Image from "next/image"
 import { Grey300 } from "../Color"
 import { getWindowWidth } from "@/lib/fontend/get-width-window"
 
-export const PostList: React.FC<IPostList> = ({ blogs }) => {
+export const PostList: React.FC<IPostList> = ({ blogs, typeQuery = 'all', onEdit, onDelete }) => {
     const { windowWidth } = getWindowWidth()
     return (
         <div className={`flex justify-center ${windowWidth < 768 ? "py-4" : "px-4 py-4"}`}>
@@ -14,7 +14,7 @@ export const PostList: React.FC<IPostList> = ({ blogs }) => {
                         return (
                             <div key={index}>
                                 <div className="p-5">
-                                    <div className="flex items-center gap-4 mb-4">
+                                    <div className="flex items-center gap-4 mb-4 justify-between">
                                         <div className="flex items-center gap-6">
                                             <Image
                                                 className="w-15 h-15 rounded-full object-cover"
@@ -27,6 +27,17 @@ export const PostList: React.FC<IPostList> = ({ blogs }) => {
                                                 <span className={`text-lg text-[${Grey300}]`}>{blog?.author?.name}</span>
                                             </div>
                                         </div>
+                                        { 
+                                          typeQuery === "private" && 
+                                            <div className="flex gap-3">
+                                              <button className="text-black py-2" onClick={async () => await onDelete?.(blog._id)}>
+                                                <Image alt="delete" src="/images/trash-postlist.png" width={16} height={16} /> 
+                                              </button>
+                                              <button className="text-black py-2" onClick={async () => await onEdit?.(blog)}>
+                                                <Image alt="edit" src="/images/edit-list.png" width={16} height={16} />
+                                              </button> 
+                                            </div>
+                                        }
                                     </div>
                                     <div className="flex items-center gap-2 text-sm text-gray-700">
                                         <div className="text-base bg-gray-100 text-[#4A4A4A] px-3 py-1 rounded-2xl p-20px">
@@ -41,7 +52,7 @@ export const PostList: React.FC<IPostList> = ({ blogs }) => {
                                             {blog.content}
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-1 mt-2 text-gray-500 text-sm">
+                                    <div className="flex items-center gap-1 mt-2 text-gray-500 text-sm cursor-pointer" onClick={async () => window.location.href = `/blog/${blog._id}`}>
                                         <div>
                                             <Image alt="message-circle" src="/images/message-circle-02.png" width={16} height={16} />
                                         </div>
@@ -50,7 +61,7 @@ export const PostList: React.FC<IPostList> = ({ blogs }) => {
                                         </div>
                                     </div>
                                 </div>
-                                { blogs?.length - 1 !== index && <div className="border-t border-gray-300 "></div>}
+                                { blogs?.length - 1 !== index && <div className="border-1 border-[#BBC2C0] "></div>}
                             </div>
                         )
                     })

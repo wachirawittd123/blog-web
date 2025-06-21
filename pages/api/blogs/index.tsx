@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
 
       const { page = "1", limit = "10", search = "", category = "", typeQuery = "all", author = "" } = req.query
-
+      
       const pageNumber = parseInt(page as string, 10)
       const limitNumber = parseInt(limit as string, 10)
       const skip = (pageNumber - 1) * limitNumber
@@ -32,8 +32,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         where.category = categoryId
       }
 
-      if(typeQuery === "private") {
-        where.author = new mongoose.Types.ObjectId(author as string)
+      if(typeQuery === "private" && author?.toString().trim().length > 0) {
+        const authorId = new mongoose.Types.ObjectId(author?.toString().trim())
+        where['author._id'] = authorId
       }
 
       const result = await Blog.aggregate([
